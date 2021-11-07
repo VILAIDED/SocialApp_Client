@@ -3,6 +3,7 @@ import './App.css';
 import {BrowserRouter,Route,Routes} from 'react-router-dom'
 import {useState} from 'react'
 import Main from './components/Main/Main';
+import Home from './page/Home';
 import Login from './components/Login/Login'
 import useToken from './useToken';
 import Profile from './components/Profile/Profile';
@@ -15,8 +16,8 @@ function App() {
      <div className="wrapper">
        <BrowserRouter>
        <Routes>
-         <Route exact path="/" element={<Main/>}>
-           <Main />
+         <Route exact path="/" element={<Home/>}>
+           <Home />
          </Route>
          <Route path="/profile" component={Profile}>
            <Profile />

@@ -1,7 +1,7 @@
 import React, {useContext} from 'react'
 import { UserService } from '../../service/user.service'
 import  {SocketContext} from '../../context/roomContext'
-export default function  Main(){
+export default function  Home(){
     const {allRoom} = useContext(SocketContext)
     return(
         <div>
