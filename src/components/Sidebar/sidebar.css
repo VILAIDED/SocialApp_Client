@@ -1,0 +1,19 @@
+.profileImg{
+    margin-left: 5px;
+    width : 60%;
+    height : 15%;
+    border-radius : 50%;
+    object-fit : cover;
+    border : 2px solid #20bd5f;
+    /* position : absolute; */
+    top : 0;
+    left : 0;
+    background : #1d1d1d
+}
+.sidebar{
+    overflow: hidden;
+    align-items: center;
+    display: block;
+    background: rgb(95, 38, 38);
+    height: 100%;
+}

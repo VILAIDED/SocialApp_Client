@@ -1,0 +1,49 @@
+
+.cardItem {
+    display: inline-grid;
+    background : #a1a1a1;
+    padding : 20px;
+    margin : 20px;
+    
+    border-radius : 10px;
+    cursor : pointer;
+    grid-template-columns: 1fr 4fr;
+    grid-column-gap: 0.5em;
+}
+.avatar{
+    display : grid;
+    margin-left: 30px;
+    grid-template-rows: repeat(2,1fr);
+    justify-items: space-between;
+}
+.avatar img{
+    margin-left: 5px;
+    width : 40px;
+    height : 40px;
+    border-radius : 50%;
+    object-fit : cover;
+    border : 2px solid #20bd5f;
+    /* position : absolute; */
+    top : 0;
+    left : 0;
+    background : #1d1d1d
+}
+.avatar img:last-child{
+    top : 20px;
+    
+}
+.names {
+    margin : 10px;
+    padding-right: 10px;
+   
+}
+.Infomation {
+    display: inline-block;
+    /* justify-content: space-between; */
+    vertical-align: top;
+}
+.topic {
+    margin-top: 10px;
+    
+}
+

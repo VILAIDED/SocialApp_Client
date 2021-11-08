@@ -1,20 +1,29 @@
 import React, {createContext,useState,useRef,useEffect} from 'react'
 import { io } from 'socket.io-client'
 import Peer from 'simple-peer'
-
+import { UserService } from '../service/user.service';
+import { RoomService } from '../service/room.service';
 const SocketContext  = createContext();
 
 const ContextProvider = ({children}) =>{
     const [stream,setStream] = useState();
     const [peers,setPeers] = useState([])
     const [users,setUsers] = useState([])
+    const [user,setUser] = useState()
     const socketRef = useRef()
     const [role,setRole] = useState("user")
     const peersRef = useRef()
-    const roomID = props.match.params.roomId
+    const roomID = "12"
     const [allRoom,setAllRoom] = useState([])
 
     useEffect(()=>{
+        const getUser = async ()=>{
+            const user = await UserService.getUser()
+            const roomData = await RoomService.getAllRoom();
+            setAllRoom(roomData.room);
+            setUser(user)
+        }
+        getUser()
         socketRef.current = io.connect("http://localhost:9090")
         navigator.mediaDevices.getUserMedia({audio : true}).then(stream=>{
             setStream(stream)
@@ -35,7 +44,7 @@ const ContextProvider = ({children}) =>{
                         peer
                     }
                     peersRef.current.push(peerObj);
-                    peers.push(peerObjc)
+                    peers.push(peerObj)
                 });
                 setUsers(users)
                 setPeers(peers)
@@ -47,7 +56,7 @@ const ContextProvider = ({children}) =>{
                 const peer = addPeer(payload.signal,payload.callerID,stream)
                 const peerObj = {
                     peerId : payload.callerID,
-                    peer = peer
+                    peer : peer
                 }
                 peersRef.current.push(peerObj)
                 setPeers(users=>[...users,peerObj])
@@ -108,6 +117,7 @@ const ContextProvider = ({children}) =>{
             peers,
             peersRef,
             users,
+            user,
             role,
             allRoom,
             roomID
