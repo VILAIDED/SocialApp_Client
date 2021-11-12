@@ -17,7 +17,7 @@ const RoomCard = ({room}) =>{
         >
             <div className="avatar" >
                 <span className="names">admin</span>
-                <img src={room.ownerId.avatar}></img>
+                <img alt={room.topic} src={room.ownerId.avatar}></img>
                 <span className="names">{room.ownerId.username}</span>
             </div>
             <div className="Infomation">

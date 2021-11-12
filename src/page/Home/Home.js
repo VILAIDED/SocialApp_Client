@@ -3,10 +3,11 @@ import { UserService } from '../../service/user.service'
 import {Dialog,DialogActions,DialogContent,DialogTitle, TextField,Button} from '@mui/material'
 import RoomCard from '../../components/RoomCard/RoomCard'
 import { RoomService } from '../../service/room.service'
-import Sidebar from "../../components/Sidebar/Sidebar"
+
 import  {SocketContext} from '../../context/roomContext'
 import { useNavigate } from 'react-router'
 import "./Home.css"
+
 export default function  Home(){
     const {setRoomId} = useContext(SocketContext) 
     const navigate = useNavigate();
@@ -28,15 +29,15 @@ export default function  Home(){
         setRoomId(Created._id);
         navigate(`/room/${Created._id}`);
     }
-    useEffect(()=>{
-        const getUser = async ()=>{
-            const user = await UserService.getUser()
-            const roomData = await RoomService.getAllRoom();
-            setRooms(roomData.room);
-           // setUser(user)
-        }
-        getUser()
-    },[])
+    // useEffect(()=>{
+    //     const getUser = async ()=>{
+    //         const user = await UserService.getUser()
+    //         const roomData = await RoomService.getAllRoom();
+    //         setRooms(roomData.room);
+    //        // setUser(user)
+    //     }
+    //     getUser()
+    // },[])
     return(
         <div className="main-page">
         {/* <div className="main-page"> */}
@@ -50,10 +51,8 @@ export default function  Home(){
         <div className="card">
             {
                 allRoom?.map((room)=>(
-                  <div>
-                    <RoomCard key={room.id} room={room} />
+                    <RoomCard key={room._id} room={room} />
                    
-                </div>
                 ))
             }
         {/* </div> */}

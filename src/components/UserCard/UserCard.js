@@ -1,7 +1,18 @@
-import React,{useContext} from 'react'
+import React,{useContext, useRef,useEffect} from 'react'
 import { SocketContext } from '../../context/roomContext'
 import './usercard.css'
 import { Button } from '@mui/material'
+const Audio = (peer)=>{
+    const ref = useRef();
+    useEffect(()=>{
+        peer.peer.on("stream",stream =>{
+            ref.current.srcObject = stream;
+        })
+    },[])
+    return (
+        <audio ref={ref} autoPlay />
+    )
+}
 const UserCard = ({user})=>{
     const {providerPermisstion} = useContext(SocketContext)
     function handleClick(){
@@ -9,11 +20,11 @@ const UserCard = ({user})=>{
     }
     return(
         <div className="userCard">
-           <div>    <img className="userImg" key={user?._id} src={user?.avatar} /></div>
-              <div> <audio /></div> 
+           <div>    <img className="userImg" key={user?.user._id} src={user?.user.avatar} /></div>
+              <div> {(user.peer) ? <Audio peer={user?.peer}/> : <div></div> } </div>
             <div className="username">
-                {(user.role == "user" ? <Button onClick={()=>handleClick()}>set Speaker</Button> : <div></div>)}
-                {user.username}
+                {(user.user.role == "user" ? <Button onClick={()=>handleClick()}>set Speaker</Button> : <div></div>)}
+                {user.user.username}
             </div>
         </div>
     )

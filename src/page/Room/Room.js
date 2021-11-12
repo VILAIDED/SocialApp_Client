@@ -9,7 +9,7 @@ import { Button } from '@mui/material'
 const Room = ()=>{
     const {roomId} = useParams()
     const navigate = useNavigate()
-    const {socketRef,users,userOut,speakers,listener} = useContext(SocketContext)
+    const {socketRef,users,userOut,speakers,listener,peersRef} = useContext(SocketContext)
     return(
         <div className="main-page">
             <div className="headbar">
@@ -34,7 +34,7 @@ const Room = ()=>{
                <div>Speaker</div>
                <div className="user-container">
                    {speakers?.map((speaker)=>(
-                   <UserCard key={speaker.id} user={speaker} />
+                   <UserCard key={speaker.user.id} user={speaker} />
                    ))}
                </div>
                </div>
@@ -42,7 +42,7 @@ const Room = ()=>{
                <div>listener</div>
                <div className="user-container">
                    {listener.map((speaker)=>(
-                   <UserCard key={speaker.id} user={speaker} />
+                   <UserCard key={speaker.user.id} user={speaker} />
                    ))}
                </div>
            </div>

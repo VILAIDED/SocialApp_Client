@@ -30,16 +30,7 @@ const ContextProvider = ({children}) =>{
         getUser()
         console.log("load user")
      },[])
-     useEffect(()=>{
-         const user = users;
-         const speakers = user.filter(u=> u.role != "user");
-         const listener = user.filter(u=> u.role == "user");
-         setSpeakers(speakers)
-         setListener(listener)
-     },[users])
     useEffect(()=>{
-        
-            console.log("meow")
             if(socketRef.current == null) return
             console.log(socketRef.current)
             socketRef.current.on("set role",role=>{
@@ -49,56 +40,73 @@ const ContextProvider = ({children}) =>{
                 setAllRoom(allRoom);
             })
             socketRef.current.on("all users",data =>{
-                console.log("all user",data)
                 const users = data.users
                 const peers = []
                 users.forEach(User => {
+                    var peer;
+                    console.log(User)
                     if(User.id != user._id){
-                    const peer = createPeer(User.socketId,socketRef.current.id,stream)
+                    const peerNew = createPeer(User.socketId,socketRef.current.id,stream)
+                    peer = peerNew
+                    }
                     const peerObj = {
-                        peerId : User.socketId,
-                        peer
+                        peer,
+                        user : User
                     }
                     peersRef.current.push(peerObj);
                     peers.push(peerObj)
-                }
+                    
                 });
-                setUsers(users)
+                console.log("peer",peersRef.current)
+                setUsers(peersRef.current)
                 setPeers(peers)
             })
             // socketRef.current.on("role changed",role=>{
             //     setRole(role)
             // })
             socketRef.current.on('user joined', payload=>{
-                console.log("user joined");
+                
                 const peer = addPeer(payload.signal,payload.caller.socketId,stream)
                 const peerObj = {
-                    peerId : payload.caller.socketId,
+                    user : payload.caller,
                     peer : peer
                 }
                 peersRef.current.push(peerObj)
-                setUsers(users=>[...users,payload.caller])
-                setPeers(users=>[...users,peerObj])
+                const newUserPeer = peersRef.current
+                console.log("user joined");
+                setUsers([...newUserPeer])
             })
             socketRef.current.on('receiving returned signal', payload => {
-                const item = peersRef.current.find(p=> p.peerId === payload.id);
+                const item = peersRef.current.find(p=> p.user.socketId === payload.id);
                 item.peer.signal(payload.signal)
             })
-            socketRef.current.on('user out',user=>{
-                // const userOut = peersRef.current.find(p => p.peerId === user.id);
-                // if(userOut){
-                //     userOut.peer.destroy();
-                // }
-                // const peers = peersRef.current.filter(p=>p.peerId !== user.id);
-                // peersRef.current = peers;
-                const newUsers = user
-                console.log(newUsers)
-                setUsers(newUsers);
-                setPeers(peers);
+            socketRef.current.on('user out',data=>{
+                console.log("out",data);
+                const outUser = peersRef.current.find(p => p.user.socketId == data.id);
+                console.log(outUser);
+                if(outUser){
+                    outUser.peer.destroy();
+                }
+                const newPeer = peersRef.current.filter(p=>p.user.socketId != data.id);
+                peersRef.current = newPeer;
+                console.log("after delete", peersRef.current)
+                const newUserPeer = peersRef.current
+                setUsers([...newUserPeer])
+                // const newUsers = user
+                // setUsers(newUsers);
+                // setPeers(peers);
             })
 
         
     },[socketRef.current])
+
+    useEffect(()=>{
+        const userPeer = users;
+        const speaker = userPeer.filter(u=> u.user.role != "user");
+        const listene = userPeer.filter(u=> u.user.role == "user");
+        setSpeakers(speaker)
+        setListener(listene)
+    },[users])
     function userOut(){
         peersRef.current = []
         setPeers([])
