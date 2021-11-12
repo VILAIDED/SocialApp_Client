@@ -1,12 +1,18 @@
 import React from "react";
 import {useNavigate} from 'react-router-dom'
+import { useContext } from "react";
+import { SocketContext } from "../../context/roomContext";
 import './RoomCard.css'
 const RoomCard = ({room}) =>{
     const history = useNavigate();
+    const {connectSocket,roomId} = useContext(SocketContext)
     return(
         <div className="cardItem" 
         onClick={()=>{
-            history(`/room?id=${room._id}`,{state : "meow"})
+            history(`/room/${room._id}`)
+            roomId.current = room._id;
+            connectSocket()
+            
         }}
         >
             <div className="avatar" >

@@ -11,7 +11,7 @@ const createRoom = async (topic,type)=>{
         roomType : type,
        
     }, tokenHeader).then(res=>{
-        return res;
+        return res.data;
     })
 }
 const getAllRoom = async ()=>{

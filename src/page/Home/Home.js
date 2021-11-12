@@ -1,15 +1,18 @@
 import React, {useContext,useState,useEffect} from 'react'
-import { UserService } from '../service/user.service'
+import { UserService } from '../../service/user.service'
 import {Dialog,DialogActions,DialogContent,DialogTitle, TextField,Button} from '@mui/material'
-import RoomCard from '../components/RoomCard/RoomCard'
-import { RoomService } from '../service/room.service'
-import Sidebar from "../components/Sidebar/Sidebar"
-import  {SocketContext} from '../context/roomContext'
-
+import RoomCard from '../../components/RoomCard/RoomCard'
+import { RoomService } from '../../service/room.service'
+import Sidebar from "../../components/Sidebar/Sidebar"
+import  {SocketContext} from '../../context/roomContext'
+import { useNavigate } from 'react-router'
 import "./Home.css"
 export default function  Home(){
-    const {user,allRoom} = useContext(SocketContext)
+    const {setRoomId} = useContext(SocketContext) 
+    const navigate = useNavigate();
+    const {allRoom} = useContext(SocketContext)
     const [rooms,setRooms] = useState()
+    const [state,setState] = useState(true)
    // const [user,setUser] = useState()
     const [open,setOpen] = useState(false);
     const [topic,setTopic] = useState('');
@@ -22,6 +25,8 @@ export default function  Home(){
     }
     const handleCreateRoom = async ()=>{
         const Created = await RoomService.createRoom(topic,type)
+        setRoomId(Created._id);
+        navigate(`/room/${Created._id}`);
     }
     useEffect(()=>{
         const getUser = async ()=>{
@@ -33,13 +38,13 @@ export default function  Home(){
         getUser()
     },[])
     return(
-        <div className="container">
-        <Sidebar user={user}/>
         <div className="main-page">
+        {/* <div className="main-page"> */}
+            
         <div className="headbar">
             <span>Room</span>
             <div className="button-container" >
-                <button onClick={handleOpen} >Create room</button>
+                <Button onClick={handleOpen} >Create room</Button>
             </div>
         </div>
         <div className="card">
@@ -51,7 +56,7 @@ export default function  Home(){
                 </div>
                 ))
             }
-        </div>
+        {/* </div> */}
         </div>
         <Dialog open={open} onClose={handleClose}>
             <DialogTitle>Create room</DialogTitle>

@@ -2,7 +2,7 @@
     display: inline-grid;
     width: 100%;
     height: 100vh;
-    grid-template-columns: 15% 85%;
+    /* grid-template-columns: 15% 85%; */
 }
 
 .headbar {
@@ -12,13 +12,10 @@
     justify-content: space-between;
     background-color: aqua;
 }
-.main-page{
-    overflow: auto;
-    display: flex;
-    flex-direction: column;
-}
+
 
 .card {
+    height: 100%;
     overflow : auto;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;

@@ -1,0 +1,27 @@
+.userCard{
+    padding : 20px;
+    margin : 0 10px 20px 0px;
+    display: flex;
+    flex-direction: column;
+    cursor : pointer;
+    vertical-align: middle;
+}
+.username{
+    margin: 10px;
+    padding : 5px;
+    /* margin-right : 10px; */
+    text-align: center;
+}
+.userImg{
+    padding : 5px;
+    margin-left: 5px;
+    height : 85%;
+    width: 100%;
+    border-radius : 50%;
+    object-fit : cover;
+    border : 2px solid #20bd5f;
+    /* position : absolute; */
+    top : 0;
+    left : 0;
+    background : #1d1d1d
+}

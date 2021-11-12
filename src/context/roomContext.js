@@ -3,20 +3,24 @@ import { io } from 'socket.io-client'
 import Peer from 'simple-peer'
 import { UserService } from '../service/user.service';
 import { RoomService } from '../service/room.service';
+
 const SocketContext  = createContext();
 
 const ContextProvider = ({children}) =>{
     const [stream,setStream] = useState();
     const [peers,setPeers] = useState([])
     const [users,setUsers] = useState([])
+    const [speakers,setSpeakers] = useState([])
+    const [listener,setListener] = useState([])
     const [user,setUser] = useState()
     const socketRef = useRef()
     const [role,setRole] = useState("user")
-    const peersRef = useRef()
-    const roomID = "12"
+    const peersRef = useRef([])
+    const roomId = useRef()
     const [allRoom,setAllRoom] = useState([])
+    
 
-    useEffect(()=>{
+     useEffect(()=>{
         const getUser = async ()=>{
             const user = await UserService.getUser()
             const roomData = await RoomService.getAllRoom();
@@ -24,27 +28,40 @@ const ContextProvider = ({children}) =>{
             setUser(user)
         }
         getUser()
-        socketRef.current = io.connect("http://localhost:9090")
-        navigator.mediaDevices.getUserMedia({audio : true}).then(stream=>{
-            setStream(stream)
-            socketRef.current.emit('join room',roomID);
+        console.log("load user")
+     },[])
+     useEffect(()=>{
+         const user = users;
+         const speakers = user.filter(u=> u.role != "user");
+         const listener = user.filter(u=> u.role == "user");
+         setSpeakers(speakers)
+         setListener(listener)
+     },[users])
+    useEffect(()=>{
+        
+            console.log("meow")
+            if(socketRef.current == null) return
+            console.log(socketRef.current)
             socketRef.current.on("set role",role=>{
                 setRole(role)
             })
             socketRef.current.on("get room",allRoom=>{
                 setAllRoom(allRoom);
             })
-            socketRef.current.on("all users",user =>{
-                const users = user
-                const peer = []
-                user.users.forEach(userId => {
-                    const peer = createPeer(userId,socketRef.current.id,stream)
+            socketRef.current.on("all users",data =>{
+                console.log("all user",data)
+                const users = data.users
+                const peers = []
+                users.forEach(User => {
+                    if(User.id != user._id){
+                    const peer = createPeer(User.socketId,socketRef.current.id,stream)
                     const peerObj = {
-                        peerId : userId,
+                        peerId : User.socketId,
                         peer
                     }
                     peersRef.current.push(peerObj);
                     peers.push(peerObj)
+                }
                 });
                 setUsers(users)
                 setPeers(peers)
@@ -53,12 +70,14 @@ const ContextProvider = ({children}) =>{
             //     setRole(role)
             // })
             socketRef.current.on('user joined', payload=>{
-                const peer = addPeer(payload.signal,payload.callerID,stream)
+                console.log("user joined");
+                const peer = addPeer(payload.signal,payload.caller.socketId,stream)
                 const peerObj = {
-                    peerId : payload.callerID,
+                    peerId : payload.caller.socketId,
                     peer : peer
                 }
                 peersRef.current.push(peerObj)
+                setUsers(users=>[...users,payload.caller])
                 setPeers(users=>[...users,peerObj])
             })
             socketRef.current.on('receiving returned signal', payload => {
@@ -66,26 +85,45 @@ const ContextProvider = ({children}) =>{
                 item.peer.signal(payload.signal)
             })
             socketRef.current.on('user out',user=>{
-                const userOut = peersRef.current.find(p => p.peerId === user.id);
-                if(userOut){
-                    userOut.peer.destroy();
-                }
-                const peers = peersRef.current.filter(p=>p.peerId !== user.id);
-                peersRef.current = peers;
+                // const userOut = peersRef.current.find(p => p.peerId === user.id);
+                // if(userOut){
+                //     userOut.peer.destroy();
+                // }
+                // const peers = peersRef.current.filter(p=>p.peerId !== user.id);
+                // peersRef.current = peers;
+                const newUsers = user
+                console.log(newUsers)
+                setUsers(newUsers);
                 setPeers(peers);
             })
 
-        })
-    },[])
+        
+    },[socketRef.current])
+    function userOut(){
+        peersRef.current = []
+        setPeers([])
 
-    function createPeer(userToSignal, callerID,stream){
+    }
+    function connectSocket(){
+        socketRef.current = io.connect("http://localhost:9000")
+        navigator.mediaDevices.getUserMedia({audio : true}).then(stream=>{
+            setStream(stream)
+            socketRef.current.emit('join room',{roomId : roomId.current,user : {
+                username : user?.username,
+                avatar : user?.avatar,
+                userId : user?._id}
+            });
+        })
+    }
+    function createPeer(userToSignal, callerId,stream){
         const peer = new Peer({
             initiator : true,
             trickle : false,
             stream
         })
         peer.on('signal',signal=>{
-            socketRef.current.emit('sending signal', {userToSignal,callerID,signal})
+            socketRef.current.emit('sending signal', {userToSignal,callerId : callerId,
+            roomId : roomId.current,signal})
         })
         return peer;
     }
@@ -107,7 +145,7 @@ const ContextProvider = ({children}) =>{
         stream.getAudioTracks()[0].enabled = !(stream.getAudioTracks()[0].enabled)
     }
     function providerPermisstion(id,role){
-        return  socketRef.current.emit("change role", { roomId: roomID, role: role, userId: id })
+        return  socketRef.current.emit("change role", { roomId: roomId.current, role: role, userId: id })
     }
 
     return(
@@ -120,7 +158,14 @@ const ContextProvider = ({children}) =>{
             user,
             role,
             allRoom,
-            roomID
+            roomId,
+            socketRef,
+            speakers,
+            listener,
+            providerPermisstion,
+            userOut,
+            // setRoomId,
+            connectSocket
         }} >
             {children}
         </SocketContext.Provider>

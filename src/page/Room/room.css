@@ -1,0 +1,21 @@
+.room-container{
+    overflow: auto;
+    height: 100%;
+}
+.user-container{
+    display: inline-grid;
+    grid-template-columns: repeat(6,1fr);
+}
+.button-box {
+    cursor : pointer;
+    height: 30px;
+    width: 40px;
+    padding: 5px 5px 0px 0px;
+}
+.button-container{
+    display: flex;
+}
+
+
+
+

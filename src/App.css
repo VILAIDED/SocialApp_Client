@@ -3,10 +3,26 @@
   text-align: center;
 }
 .wrapper {
+  overflow: hidden;
   height: 100%;
+  display: flex;
+
+}
+.headbar {
+  padding : 10px;
+  display: flex;
+  justify-content: space-between;
+  background-color: aqua;
+}
+.main-page{
+  width: 100%;
+  overflow: hidden;
+  height: 100vh;
+ 
+  
 }
 body{
-  background: #121212;
+  overflow: hidden;
   height: 100%;
 }
 .App-logo {
