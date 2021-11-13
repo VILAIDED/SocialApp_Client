@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router'
 import "./Home.css"
 
 export default function  Home(){
-    const {setRoomId} = useContext(SocketContext) 
+    const {setRoomId,roomCur} = useContext(SocketContext) 
     const navigate = useNavigate();
     const {allRoom} = useContext(SocketContext)
     const [rooms,setRooms] = useState()
@@ -26,7 +26,7 @@ export default function  Home(){
     }
     const handleCreateRoom = async ()=>{
         const Created = await RoomService.createRoom(topic,type)
-        setRoomId(Created._id);
+        roomCur.current = Created._id
         navigate(`/room/${Created._id}`);
     }
     // useEffect(()=>{

@@ -16,7 +16,7 @@ const ContextProvider = ({children}) =>{
     const socketRef = useRef()
     const [role,setRole] = useState("user")
     const peersRef = useRef([])
-    const roomId = useRef()
+    const roomCur = useRef()
     const [allRoom,setAllRoom] = useState([])
     
 
@@ -33,8 +33,10 @@ const ContextProvider = ({children}) =>{
     useEffect(()=>{
             if(socketRef.current == null) return
             console.log(socketRef.current)
-            socketRef.current.on("set role",role=>{
-                setRole(role)
+            socketRef.current.on("role change",async (role)=>{  
+                console.log('role')
+                roomCur.current = await RoomService.getRoomById(roomCur.current._id)
+                setUsers(peersRef.current)
             })
             socketRef.current.on("get room",allRoom=>{
                 setAllRoom(allRoom);
@@ -101,12 +103,8 @@ const ContextProvider = ({children}) =>{
     },[socketRef.current])
 
     useEffect(()=>{
-        const userPeer = users;
-        const speaker = userPeer.filter(u=> u.user.role != "user");
-        const listene = userPeer.filter(u=> u.user.role == "user");
-        setSpeakers(speaker)
-        setListener(listene)
-    },[users])
+        loadUser()
+    },[users,roomCur])
     function userOut(){
         peersRef.current = []
         setPeers([])
@@ -116,7 +114,7 @@ const ContextProvider = ({children}) =>{
         socketRef.current = io.connect("http://localhost:9000")
         navigator.mediaDevices.getUserMedia({audio : true}).then(stream=>{
             setStream(stream)
-            socketRef.current.emit('join room',{roomId : roomId.current,user : {
+            socketRef.current.emit('join room',{roomId : roomCur.current._id,user : {
                 username : user?.username,
                 avatar : user?.avatar,
                 userId : user?._id}
@@ -131,7 +129,7 @@ const ContextProvider = ({children}) =>{
         })
         peer.on('signal',signal=>{
             socketRef.current.emit('sending signal', {userToSignal,callerId : callerId,
-            roomId : roomId.current,signal})
+            roomId : roomCur.current._id,signal})
         })
         return peer;
     }
@@ -152,8 +150,25 @@ const ContextProvider = ({children}) =>{
     function muted(){
         stream.getAudioTracks()[0].enabled = !(stream.getAudioTracks()[0].enabled)
     }
-    function providerPermisstion(id,role){
-        return  socketRef.current.emit("change role", { roomId: roomId.current, role: role, userId: id })
+    function loadUser(){
+        const speaker = []
+        const listen = []
+        const userPeer = users;
+        userPeer.forEach((u=>{
+            if(roomCur.current.speakers.find(s=> s._id == u.user.id) 
+            || roomCur.current.ownerId._id == u.user.id){
+                speaker.push(u);
+            }else{
+                listen.push(u);
+            }
+        }))
+
+        setSpeakers(speaker)
+        setListener(listen)
+    }
+    async function  providerPermisstion(id,role){
+        await RoomService.setSpeakers(roomCur.current._id,id);
+        return  socketRef.current.emit("change role", { roomId: roomCur.current._id, role: role, userId: id })
     }
 
     return(
@@ -166,7 +181,7 @@ const ContextProvider = ({children}) =>{
             user,
             role,
             allRoom,
-            roomId,
+            roomCur,
             socketRef,
             speakers,
             listener,

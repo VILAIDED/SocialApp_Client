@@ -34,7 +34,7 @@ const Room = ()=>{
                <div>Speaker</div>
                <div className="user-container">
                    {speakers?.map((speaker)=>(
-                   <UserCard key={speaker.user.id} user={speaker} />
+                   <UserCard key={speaker.user.id} user={speaker} role="speaker" />
                    ))}
                </div>
                </div>
@@ -42,7 +42,7 @@ const Room = ()=>{
                <div>listener</div>
                <div className="user-container">
                    {listener.map((speaker)=>(
-                   <UserCard key={speaker.user.id} user={speaker} />
+                   <UserCard key={speaker.user.id} user={speaker} role="user" />
                    ))}
                </div>
            </div>

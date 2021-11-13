@@ -5,12 +5,12 @@ import { SocketContext } from "../../context/roomContext";
 import './RoomCard.css'
 const RoomCard = ({room}) =>{
     const history = useNavigate();
-    const {connectSocket,roomId} = useContext(SocketContext)
+    const {connectSocket,roomCur} = useContext(SocketContext)
     return(
         <div className="cardItem" 
         onClick={()=>{
             history(`/room/${room._id}`)
-            roomId.current = room._id;
+            roomCur.current = room;
             connectSocket()
             
         }}

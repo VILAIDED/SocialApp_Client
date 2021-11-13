@@ -14,9 +14,21 @@ const createRoom = async (topic,type)=>{
         return res.data;
     })
 }
+const setSpeakers = async (roomId,userId)=>{
+    console.log("setSpeaker",roomId,userId)
+    return await axios.put(`/room/speaker/${roomId}`,{
+        userId : userId
+    })
+}
 const getAllRoom = async ()=>{
     return await axios.get('/room').then(res=>{
         return res.data
+    })
+}
+const getRoomById = async (id)=>{
+    return await axios.get(`/room/roombyid/${id}`)
+    .then(res=>{
+        return res.data.room
     })
 }
 const getRoomByType = async (type)=>{
@@ -28,5 +40,7 @@ const getRoomByType = async (type)=>{
 export const RoomService = {
     createRoom,
     getRoomByType,
-    getAllRoom
+    getAllRoom,
+    setSpeakers,
+    getRoomById
 }
