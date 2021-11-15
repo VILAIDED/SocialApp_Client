@@ -30,12 +30,17 @@ const ContextProvider = ({children}) =>{
         getUser()
         console.log("load user")
      },[])
+     useEffect(()=>{
+       loadUser()
+    },[users])
     useEffect(()=>{
             if(socketRef.current == null) return
             console.log(socketRef.current)
             socketRef.current.on("role change",async (role)=>{  
                 console.log('role')
                 roomCur.current = await RoomService.getRoomById(roomCur.current._id)
+                console.log(roomCur.current);
+                loadUser();
                 setUsers(peersRef.current)
             })
             socketRef.current.on("get room",allRoom=>{
@@ -59,7 +64,6 @@ const ContextProvider = ({children}) =>{
                     peers.push(peerObj)
                     
                 });
-                console.log("peer",peersRef.current)
                 setUsers(peersRef.current)
                 setPeers(peers)
             })
@@ -75,7 +79,6 @@ const ContextProvider = ({children}) =>{
                 }
                 peersRef.current.push(peerObj)
                 const newUserPeer = peersRef.current
-                console.log("user joined");
                 setUsers([...newUserPeer])
             })
             socketRef.current.on('receiving returned signal', payload => {
@@ -83,7 +86,6 @@ const ContextProvider = ({children}) =>{
                 item.peer.signal(payload.signal)
             })
             socketRef.current.on('user out',data=>{
-                console.log("out",data);
                 const outUser = peersRef.current.find(p => p.user.socketId == data.id);
                 console.log(outUser);
                 if(outUser){
@@ -91,7 +93,6 @@ const ContextProvider = ({children}) =>{
                 }
                 const newPeer = peersRef.current.filter(p=>p.user.socketId != data.id);
                 peersRef.current = newPeer;
-                console.log("after delete", peersRef.current)
                 const newUserPeer = peersRef.current
                 setUsers([...newUserPeer])
                 // const newUsers = user
@@ -102,9 +103,7 @@ const ContextProvider = ({children}) =>{
         
     },[socketRef.current])
 
-    useEffect(()=>{
-        loadUser()
-    },[users,roomCur])
+
     function userOut(){
         peersRef.current = []
         setPeers([])
@@ -153,7 +152,7 @@ const ContextProvider = ({children}) =>{
     function loadUser(){
         const speaker = []
         const listen = []
-        const userPeer = users;
+        const userPeer = peersRef.current;
         userPeer.forEach((u=>{
             if(roomCur.current.speakers.find(s=> s._id == u.user.id) 
             || roomCur.current.ownerId._id == u.user.id){
@@ -162,6 +161,7 @@ const ContextProvider = ({children}) =>{
                 listen.push(u);
             }
         }))
+        console.log("speaker",speaker)
 
         setSpeakers(speaker)
         setListener(listen)
