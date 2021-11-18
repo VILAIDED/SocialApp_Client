@@ -9,22 +9,20 @@ import { Button } from '@mui/material'
 const Room = ()=>{
     const {roomId} = useParams()
     const navigate = useNavigate()
-    const {socketRef,users,userOut,speakers,listener,peersRef} = useContext(SocketContext)
+    const {socketRef,users,userOut,speakers,listener,peersRef,muted} = useContext(SocketContext)
     return(
         <div className="main-page">
             <div className="headbar">
             <Button onClick={()=>{
                 if(socketRef.current)  socketRef.current.disconnect();
-               
                 userOut();
-                
                 navigate(-1)}}>Back</Button>
             <div className="button-container" >
             <div className="button-box">
-            <span class="material-icons" >volume_up</span>
+            <span className="material-icons" >volume_up</span>
             </div>
-            <div className="button-box" onClick={()=>console.log("heoo")}>
-            <span class="material-icons" >mic</span>
+            <div className="button-box" onClick={()=>muted()}>
+            <span className="material-icons" >mic</span>
             </div>
             <Button>Leave room</Button>
             </div >
@@ -33,8 +31,8 @@ const Room = ()=>{
                <div>
                <div>Speaker</div>
                <div className="user-container">
-                   {speakers?.map((speaker)=>(
-                   <UserCard key={speaker.user.id} user={speaker} role="speaker" />
+                   {speakers.map(speaker => (
+                       <UserCard key={speaker.user.id} user={speaker}  peer={speaker?.peer} role="speaker" />
                    ))}
                </div>
                </div>
@@ -42,7 +40,7 @@ const Room = ()=>{
                <div>listener</div>
                <div className="user-container">
                    {listener.map((speaker)=>(
-                   <UserCard key={speaker.user.id} user={speaker} role="user" />
+                   <UserCard key={speaker.user.id} peer={speaker?.peer} user={speaker} role="user" />
                    ))}
                </div>
            </div>

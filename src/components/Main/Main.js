@@ -7,7 +7,6 @@ export default function  Main(){
         <div>
             <h1>Hello world</h1>
             <button onClick={UserService.Logout}>
-                Logout
             </button>
         
         </div>
