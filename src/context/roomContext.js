@@ -35,11 +35,26 @@ const ContextProvider = ({children}) =>{
     // },[users])
     useEffect(()=>{
             if(socketRef.current == null) return
-            socketRef.current.on("role change",async (role)=>{  
-                roomCur.current = await RoomService.getRoomById(roomCur.current._id)
-                console.log(roomCur.current);
-                loadUser();
-                setUsers(peersRef.current)
+            socketRef.current.on("role change",(data)=>{  
+               
+                RoomService.getRoomById(roomCur.current._id).then(room=>{
+                    roomCur.current = room
+                    console.log(roomCur.current)
+                    if(data.role == "speaker"){
+                        const userChange = listenerRef.current.find(l=> l.user.id == data.id)
+                        if(userChange){
+                            listenerRef.current = listenerRef.current.filter(l=> l.user.id != data.id);
+                            setListener(listenerRef.current)
+                            speakerRef.current.push(userChange);
+                            setSpeakers(speakerRef.current)
+                            
+                            console.log("speaker",speakerRef.current)
+                        }
+                    }
+                  
+                    setUsers(peersRef.current)
+                })
+                
             })
             // socketRef.current.on("get room",allRoom=>{
             //     setAllRoom(allRoom);
@@ -203,7 +218,7 @@ const ContextProvider = ({children}) =>{
         setListener(listen)
     }
     async function  providerPermisstion(id,role){
-        await RoomService.setSpeakers(roomCur.current._id,id);
+        await RoomService.setSpeakers(roomCur.current._id,id)
         return  socketRef.current.emit("change role", { roomId: roomCur.current._id, role: role, userId: id })
     }
 

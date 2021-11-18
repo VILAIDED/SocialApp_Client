@@ -31,7 +31,7 @@ const Room = ()=>{
                <div>
                <div>Speaker</div>
                <div className="user-container">
-                   {speakers.map(speaker => (
+                   {speakers.map((speaker) => (
                        <UserCard key={speaker.user.id} user={speaker}  peer={speaker?.peer} role="speaker" />
                    ))}
                </div>
