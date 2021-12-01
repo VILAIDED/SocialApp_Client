@@ -2,7 +2,7 @@ import './App.css';
 import {ContextProvider} from './context/roomContext'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Home from './page/Home/Home';
-import Login from './components/Login/Login'
+import Main from './page/Main/Main'
 import Room from './page/Room/Room'
 
 import useToken from './useToken';
@@ -12,7 +12,7 @@ function App() {
   const { token, setToken } = useToken()
  
   if (!token) {
-    return <Login setToken={setToken} />
+    return <Home setToken={setToken} />
   }
   return (
     <ContextProvider>
@@ -20,11 +20,9 @@ function App() {
       <Sidebar /> 
       <BrowserRouter>
         <Routes>
-          <Route exact path="/" element={<Home />}>
-            <Home />
+          <Route exact path="/" element={<Main />}>
           </Route>
           <Route exact path="/room/:roomId" element={<Room />} >
-            <Home />
           </Route>
           <Route path="/profile" element={Profile}>
             <Profile />

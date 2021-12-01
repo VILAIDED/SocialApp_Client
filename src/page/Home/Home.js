@@ -1,88 +1,39 @@
-import React, {useContext,useState,useEffect} from 'react'
-import { UserService } from '../../service/user.service'
-import {Dialog,DialogActions,DialogContent,DialogTitle, TextField,Button} from '@mui/material'
-import RoomCard from '../../components/RoomCard/RoomCard'
-import { RoomService } from '../../service/room.service'
-
-import  {SocketContext} from '../../context/roomContext'
-import { useNavigate } from 'react-router'
-import "./Home.css"
-
-export default function  Home(){
-    const {setRoomId,roomCur} = useContext(SocketContext) 
-    const navigate = useNavigate();
-    const {allRoom} = useContext(SocketContext)
-    const [rooms,setRooms] = useState()
-    const [state,setState] = useState(true)
-   // const [user,setUser] = useState()
-    const [open,setOpen] = useState(false);
-    const [topic,setTopic] = useState('');
-    const [type,setType] = useState('')
-    const handleOpen = ()=>{
-        setOpen(true)
-    }
-    const handleClose = ()=>{
-        setOpen(false);
-    }
-    const handleCreateRoom = async ()=>{
-        const Created = await RoomService.createRoom(topic,type)
-        roomCur.current = Created._id
-        navigate(`/room/${Created._id}`);
-    }
-    // useEffect(()=>{
-    //     const getUser = async ()=>{
-    //         const user = await UserService.getUser()
-    //         const roomData = await RoomService.getAllRoom();
-    //         setRooms(roomData.room);
-    //        // setUser(user)
-    //     }
-    //     getUser()
-    // },[])
+import { Button } from "@mui/material";
+import React,{useState} from "react";
+import './home.css'
+import LoginDiaLog from "../../components/LoginDialog/LoginDialog";
+import RegisterDialog from "../../components/RegisterDialog/RegisterDialog"
+const Home = ({setToken})=>{
+    const [openLDialog,setOpenLDialog] = useState(false)
+    const [openSDialog,setOpenSDialog] = useState(false);
     return(
-        <div className="main-page">
-        {/* <div className="main-page"> */}
-            
-        <div className="headbar">
-            <span>Room</span>
-            <div className="button-container" >
-                <Button onClick={handleOpen} >Create room</Button>
+        <div className="home-container">
+            <div className="home-cover">
+                <img className="home-logo" src={process.env.PUBLIC_URL + "/logo-vertical.jpg"} alt="logo-home" />
             </div>
-        </div>
-        <div className="card">
-            {
-                allRoom?.map((room)=>(
-                    <RoomCard key={room._id} room={room} />
-                   
-                ))
-            }
-        {/* </div> */}
-        </div>
-        <Dialog open={open} onClose={handleClose}>
-            <DialogTitle>Create room</DialogTitle>
-            <DialogContent>
-                <div>
-                <TextField autoFocus
-                onChange={(e)=> setTopic(e.target.value)}
-                id="topic"
-                labal = "Topic"
-                type="text"
-                placeholder="Topic"
-                />
+            <div className="home-content">  
+                <h1>Happening now</h1>
+                <h3>Join with us Today</h3>
+                <div className="btn-user">
+                  <div className="btn-item">
+                    <div className="span-text">
+                       <span>You are new in GitHouse</span>
+                    </div>
+                       <Button variant="contained" onClick={()=>setOpenSDialog(true)} style={{ borderRadius: 30 }} className="btn">Sign up</Button>
+                    </div>
+                    <div className="or-text">or</div>
+                    <div className="btn-item">
+                        <div className="span-text">
+                           <span>Already have an account?</span>
+                        </div>
+                           <Button onClick={()=> setOpenLDialog(true)} variant="outlined" style={{ borderRadius: 30 }} className="btn">Sign in</Button>
+                    </div>
                 </div>
-                <div>
-                <TextField autoFocus
-                onChange={(e)=> setType(e.target.value)}
-                id="type"
-                labal = "type"
-                type="text"
-                placeholder="Type room"
-                />
-                </div>
-                <div>
-                    <Button onClick={handleCreateRoom}>Let's go</Button>
-                </div>
-            </DialogContent>
-        </Dialog>
+               
+            </div>
+            <LoginDiaLog open={openLDialog} setOpen={setOpenLDialog} setToken={setToken}/>
+            <RegisterDialog open={openSDialog} setOpen={setOpenSDialog} setToken={setToken} />
         </div>
     )
 }
+export default Home;

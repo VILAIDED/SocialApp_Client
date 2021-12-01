@@ -1,0 +1,85 @@
+.home-container{
+    flex-direction: column;
+    height: 87vh;
+    width: 100vw;
+    display: flex;
+  
+    flex-wrap: wrap;
+}
+.home-logo{
+    
+}
+.home-cover {
+    height: 100%;
+   
+    position: relative;
+}
+.home-content{
+ 
+    display : flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content : space-evenly;
+    padding : 2rem;
+}
+.btn-user{
+  display: flex;
+ 
+  flex-direction: column;
+  font-size: 1rem;
+  font-weight: 700;
+
+}
+.btn-item{
+  padding: 10px 0 0 0px;
+}
+.or-text{
+  color: dimgray;
+  padding-top : 30px;
+  text-align: center;
+}
+.span-text{
+  padding-top : 10px;
+  padding-bottom: 15px;
+}
+.btn{
+  
+  width: 15rem;
+  height: 2.5rem;
+  
+  border-radius: 50;
+}
+.msg-big{
+   font : 80px -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif
+}
+.msg-medium {
+    
+   font : 50px -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif
+}
+
+.home-main {
+  margin-left: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+h1, h3 {
+    color: #0f1419;
+    font-weight: 900;
+  }
+h1 {
+    font-size: 5.0vw;
+  }
+  
+h3 {
+    font-size: 2.3rem;
+  }
+
+.footer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+  

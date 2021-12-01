@@ -12,7 +12,18 @@
     justify-content: space-between;
     background-color: aqua;
 }
-
+.icon-profile img{
+    margin-left: 5px;
+    width : 40px;
+    height : 40px;
+    border-radius : 50%;
+    object-fit : cover;
+    border : 2px solid #20bd5f;
+    /* position : absolute; */
+    top : 0;
+    left : 0;
+    background : #1d1d1d
+}
 
 .card {
     height: 100%;

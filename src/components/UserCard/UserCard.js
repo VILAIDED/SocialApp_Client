@@ -7,10 +7,8 @@ const Audio = ({peer,setBorderT})=>{
     const dataArray = useRef(null);
     const ref = useRef()
     useEffect(()=>{
-        console.log("test so")
         if(peer){
-        peer.on("stream",stream=>{ 
-             
+        peer.on("stream",stream=>{    
             console.log("has stream",stream)
 
            ref.current.srcObject = stream

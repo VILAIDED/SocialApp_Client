@@ -10,9 +10,7 @@ const RoomCard = ({room}) =>{
         <div className="cardItem" 
         onClick={()=>{
             history(`/room/${room._id}`)
-            roomCur.current = room;
-            connectSocket()
-            
+            roomCur.current = room; 
         }}
         >
             <div className="avatar" >

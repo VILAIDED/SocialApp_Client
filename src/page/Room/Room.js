@@ -2,6 +2,7 @@ import React,{useContext,useState,useEffect} from 'react'
 import {SocketContext} from "../../context/roomContext"
 import {UserData} from '../../DataTest/userData'
 import UserCard from '../../components/UserCard/UserCard'
+import {RoomService} from '../../service/room.service'
 import { useNavigate ,useParams} from 'react-router'
 import 'material-icons/iconfont/material-icons.css';
 import './room.css'
@@ -9,12 +10,27 @@ import { Button } from '@mui/material'
 const Room = ()=>{
     const {roomId} = useParams()
     const navigate = useNavigate()
-    const {socketRef,users,userOut,speakers,listener,peersRef,muted} = useContext(SocketContext)
+    const {socketRef,roomCur,userOut,speakersRef,speakers,listener,user,muted,joinRoom} = useContext(SocketContext)
+    useEffect(()=>{
+        if(!user) return
+        const getRoom = async ()=>{
+            roomCur.current = await RoomService.getRoomById(roomId)
+        }       
+        getRoom().then(()=>{
+            console.log("meow meow")
+            joinRoom()
+        })
+        console.log("user",speakers)
+        
+    },[user])
+    // useEffect(()=>{
+        
+    // },[speakersRef.current])
     return(
         <div className="main-page">
             <div className="headbar">
             <Button onClick={()=>{
-                if(socketRef.current)  socketRef.current.disconnect();
+                if(socketRef.current)  socketRef.current.emit("user out");
                 userOut();
                 navigate(-1)}}>Back</Button>
             <div className="button-container" >

@@ -1,0 +1,14 @@
+.btn-login{
+    padding: 30px 0px 0px 50px;
+}
+.text-field{
+    padding: 20px;
+}
+.no-account{
+    padding-top : 20px;
+}
+.sign-up {
+    cursor : pointer;
+    padding-left: 2px;
+    color :dodgerblue;
+}
