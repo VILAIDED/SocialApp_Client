@@ -21,15 +21,18 @@ const ContextProvider = ({children}) =>{
     const [allRoom,setAllRoom] = useState([])
     
     
-
+    const getUser = async ()=>{
+        const user = await UserService.getUser()
+        setUser(user)
+    }
+    const getAllRoom = async ()=>{
+        const roomData = await RoomService.getAllRoom();
+        setAllRoom(roomData.room);
+        
+    }
      useEffect(()=>{
-        const getUser = async ()=>{
-            const user = await UserService.getUser()
-            setUser(user)
-            const roomData = await RoomService.getAllRoom();
-            setAllRoom(roomData.room);
-            
-        }
+        
+        getAllRoom()
         getUser()
         socketRef.current = io.connect("http://localhost:9000")
         return ()=> socketRef.current.disconnect()
@@ -69,6 +72,8 @@ const ContextProvider = ({children}) =>{
                     if(User.id != user._id){
                     const peerNew = createPeer(User.socketId,socketRef.current.id,stream)
                     peer = peerNew
+                    }else{
+                        User.username = "You"
                     }
                     const peerObj = {
                         peer,
@@ -191,7 +196,7 @@ const ContextProvider = ({children}) =>{
         })
 
         peer.signal(incommingSignal)
-        return peer;
+        return peer
     }
     function muted(){
         console.log(stream)
@@ -244,6 +249,7 @@ const ContextProvider = ({children}) =>{
             socketRef,
             speakers,
             listener,
+            getUser,
             providerPermisstion,
             userOut,
             // setRoomId,

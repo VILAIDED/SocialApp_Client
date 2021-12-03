@@ -1,0 +1,36 @@
+.img-profile{
+    width: 100%;
+    height: 100%;
+    align-items: center;
+}
+.btn-save{
+    width: 5rem;
+  height: 2.5rem;
+  color: white;
+}
+.btn-logout{
+    display: block;
+    margin : auto;
+    padding-top : 20px;
+}
+.profile-header{
+    overflow: hidden;
+    padding : 10px;
+    display: flex;
+    justify-content: space-between;
+}
+.img-profile img{
+    display: block;
+    width : 60%;
+    min-width: 130px;
+    max-width: 150px;
+   
+    min-height: 150px;
+    border-radius : 50%;
+    object-fit : cover;
+    border : 2px solid black;
+    /* position : absolute; */
+    margin:auto;
+    background : #1d1d1d
+
+}

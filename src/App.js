@@ -17,7 +17,6 @@ function App() {
   return (
     <ContextProvider>
     <div className="wrapper">
-      <Sidebar /> 
       <BrowserRouter>
         <Routes>
           <Route exact path="/" element={<Main />}>

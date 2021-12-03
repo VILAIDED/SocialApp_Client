@@ -63,7 +63,7 @@ const UserCard = ({user,peer,role})=>{
   
     return(
         <div className="userCard" >
-           <div>    <img className="userImg" key={user?.user._id} src={user?.user.avatar} style={{border : borderT ? "10px solid #20bd5f" : ''}} /></div>
+             <img className="userImg" key={user?.user._id} src={process.env.REACT_APP_public +user?.user.avatar} style={{border : borderT ? "10px solid #20bd5f" : ''}} />
               <div className="audio"> {(user.peer) ? <Audio peer={peer} setBorderT={setBorderT}/> : <div></div>}  </div>
             <div className="username">
                 {(role == "user") ? <Button onClick={()=>handleClick()}>set Speaker</Button> : <div></div>}

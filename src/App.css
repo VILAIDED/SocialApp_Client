@@ -1,3 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
+*{
+  font-family: 'Roboto', sans-serif;
+}
 .App {
   height: 100%;
   text-align: center;
@@ -15,6 +19,7 @@
   background-color: aqua;
 }
 .main-page{
+  background-color:#E6DDC4;
   width: 100%;
   overflow: hidden;
   height: 100vh;

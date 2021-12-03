@@ -15,20 +15,20 @@ const RoomCard = ({room}) =>{
         >
             <div className="avatar" >
                 <span className="names">admin</span>
-                <img alt={room.topic} src={room.ownerId.avatar}></img>
+                <img alt={room.topic} src={process.env.REACT_APP_public + room.ownerId.avatar}></img>
                 <span className="names">{room.ownerId.username}</span>
             </div>
             <div className="Infomation">
-                <h3 className="topic">
-                    {room.topic}
-                </h3>
                 <div>
-                    {room.description}
+                  <div className="topic">
+                    {room.topic}
+                  </div>
+                  <div className="description-text">
+                   {room.description}
+                  </div>
                 </div>
                 <div className="speakers">
-                {room.speakers.map((speaker)=>{
-                    <span>{speaker.username}</span>
-                })}
+               <span className="speaker-t">speaker</span> : Ning,Cap...
             </div>
             </div>
 

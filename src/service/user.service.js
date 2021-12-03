@@ -5,7 +5,8 @@ export const UserService = {
     Logout,
     getUser,
     Register,
-    UploadProfile
+    UploadProfile,
+    profileUpdate
 }
 const token = localStorage.getItem("token")
  async function UploadProfile(file){
@@ -40,6 +41,15 @@ const token = localStorage.getItem("token")
 function Logout(){
     localStorage.removeItem("token");
 }
+ async function profileUpdate(username,realname){
+    return await axios.put('/auth/editprofile',{username : username,realname : realname},{
+        headers : {
+            "auth-token" : JSON.parse(token)
+        }
+    }).then(res=>{
+        return res.data
+    })
+ }
  async function getUser(){
      return await axios.get('/auth/logined',{
          headers : {

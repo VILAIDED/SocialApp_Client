@@ -29,7 +29,8 @@ const Room = ()=>{
     return(
         <div className="main-page">
             <div className="headbar">
-            <Button onClick={()=>{
+            <Button style={{color : "#181D31",backgroundColor : "#E6DDC4"}} 
+            onClick={()=>{
                 if(socketRef.current)  socketRef.current.emit("user out");
                 userOut();
                 navigate(-1)}}>Back</Button>
@@ -40,12 +41,12 @@ const Room = ()=>{
             <div className="button-box" onClick={()=>muted()}>
             <span className="material-icons" >mic</span>
             </div>
-            <Button>Leave room</Button>
+            <Button style={{color : "#f8f8ff",backgroundColor : "#CD1818"}}>Leave room</Button>
             </div >
            </div>
            <div className="room-container">
                <div>
-               <div>Speaker</div>
+               {/* <div>Speaker</div> */}
                <div className="user-container">
                    {speakers.map((speaker) => (
                        <UserCard key={speaker.user.id} user={speaker}  peer={speaker?.peer} role="speaker" />
@@ -53,12 +54,17 @@ const Room = ()=>{
                </div>
                </div>
                <div>
-               <div>listener</div>
+               <div></div>
+               {listener.length > 0 ? 
+               <div>
+                   <span className="span-t">Listener</span>
                <div className="user-container">
                    {listener.map((speaker)=>(
                    <UserCard key={speaker.user.id} peer={speaker?.peer} user={speaker} role="user" />
                    ))}
                </div>
+               </div> :<div></div>}
+               
            </div>
            </div>
             </div>

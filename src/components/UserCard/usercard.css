@@ -13,14 +13,15 @@
     text-align: center;
 }
 .userImg{
-    padding : 5px;
-    margin-left: 5px;
+    display: block;
+    padding : 2px;
     min-height: 200px;
-    height : 85%;
-    width: 100%;
+    min-width: 200px;
+    height : 90%;
+    width: 62%;
     border-radius : 50%;
     object-fit : cover;
-    
+    margin:auto;
     /* position : absolute; */
     top : 0;
     left : 0;

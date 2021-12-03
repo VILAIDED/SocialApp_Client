@@ -1,7 +1,9 @@
 
 .cardItem {
     display: inline-grid;
-    background : #a1a1a1;
+    /* background : #E0B589;
+     */
+     background : #f8f8ffba;
     padding : 20px;
     margin : 20px;
     
@@ -13,7 +15,7 @@
 .avatar{
     display : grid;
     margin-left: 30px;
-    grid-template-rows: repeat(2,1fr);
+    grid-template-rows: repeat(3,1fr);
     justify-items: space-between;
 }
 .avatar img{
@@ -22,7 +24,7 @@
     height : 40px;
     border-radius : 50%;
     object-fit : cover;
-    border : 2px solid #20bd5f;
+    border : 2px solid black;
     /* position : absolute; */
     top : 0;
     left : 0;
@@ -37,8 +39,17 @@
     padding-right: 10px;
    
 }
+.description-text{
+    color: #363945;
+    padding-top: 10px;
+}
+.speaker-t{
+    color: #363945;
+}
 .Infomation {
-    display: inline-block;
+    display: inline-flex;
+    justify-content: space-between;
+    flex-direction: column;
     /* justify-content: space-between; */
     vertical-align: top;
 }
