@@ -45,13 +45,14 @@ const ContextProvider = ({children}) =>{
     // },[speakerRef.current])
     useEffect(()=>{
             if(socketRef.current == null || !user) return
-           
             socketRef.current.on("role change",(data)=>{  
                 RoomService.getRoomById(roomCur.current._id).then(room=>{
                     roomCur.current = room
                     console.log(roomCur.current)
                     if(data.role == "speaker"){
-                        const userChange = peersRef.current.find(l=> l.user.id == data.id)
+                        // const userChange = peersRef.current.
+                        const test = peersRef.current
+                        const userChange = test.find(l=> l.user.id == data.id)
                         setListener(listener=> listener.filter(l => l.user.id != data.id));
                         setSpeakers(speakers=> [...speakers,userChange])
                     }
