@@ -22,7 +22,8 @@
 }
 .span-t{
     margin-left: 15px;
-    color: #181D31;
+    color:#181D31 ;
+    
     display: inline-flex;
     align-items: center;
     line-height: normal;
@@ -52,10 +53,10 @@
     margin-top: 10px;
     background-color:  #E6DDC4; 
     height: 100%;
-    overflow : auto;
+    overflow : hidden;
 }
 .card {
-    height: 100%;
+    height: 100vh;
     overflow : auto;
     display: grid;
     grid-template-columns: repeat(4,1fr);

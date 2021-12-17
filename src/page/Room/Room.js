@@ -9,12 +9,17 @@ import './room.css'
 import { Button } from '@mui/material'
 const Room = ()=>{
     const {roomId} = useParams()
+    const [isAdmin,setIsAdmin] = useState(false);
     const navigate = useNavigate()
-    const {socketRef,roomCur,userOut,speakersRef,speakers,listener,user,muted,joinRoom} = useContext(SocketContext)
+    const {socketRef,roomCur,userOut,speakersRef,speakers,listener,user,muted,joinRoom,micStatus} = useContext(SocketContext)
     useEffect(()=>{
         if(!user) return
         const getRoom = async ()=>{
             roomCur.current = await RoomService.getRoomById(roomId)
+            console.log("id",roomCur.current)
+            if(roomCur.current.ownerId._id == user._id){
+                setIsAdmin(true);
+            }
         }       
         getRoom().then(()=>{
             console.log("meow meow")
@@ -34,12 +39,12 @@ const Room = ()=>{
                 if(socketRef.current)  socketRef.current.emit("user out");
                 userOut();
                 navigate(-1)}}>Back</Button>
+
+             <span className='span-topic'>{roomCur.current?.topic}</span>
             <div className="button-container" >
-            <div className="button-box">
-            <span className="material-icons" >volume_up</span>
-            </div>
+            
             <div className="button-box" onClick={()=>muted()}>
-            <span className="material-icons" >mic</span>
+            <span className="material-icons" >{micStatus ? "mic" : "mic_off"}</span>
             </div>
             <Button style={{color : "#f8f8ff",backgroundColor : "#CD1818"}}>Leave room</Button>
             </div >
@@ -49,7 +54,7 @@ const Room = ()=>{
                {/* <div>Speaker</div> */}
                <div className="user-container">
                    {speakers.map((speaker) => (
-                       <UserCard key={speaker.user.id} user={speaker}  peer={speaker?.peer} role="speaker" />
+                       <UserCard key={speaker.user.id} user={speaker.user}  peer={speaker?.peer} role="speaker" />
                    ))}
                </div>
                </div>
@@ -60,7 +65,7 @@ const Room = ()=>{
                    <span className="span-t">Listener</span>
                <div className="user-container">
                    {listener.map((speaker)=>(
-                   <UserCard key={speaker.user.id} peer={speaker?.peer} user={speaker} role="user" />
+                   <UserCard key={speaker.user.id} peer={speaker?.peer} user={speaker.user} isAdmin={isAdmin} role="user" />
                    ))}
                </div>
                </div> :<div></div>}

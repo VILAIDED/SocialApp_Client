@@ -3,9 +3,22 @@
     height: 100%;
     background-color: #E6DDC4;
 }
+.headbar-left {
+    display: flex;
+    margin-right: 30%;
+    justify-self: spa;
+    justify-content: space-around;
+    align-items: center;
+}
+.headbar-topic{
+    
+}
 .user-container{
     display: inline-grid;
     grid-template-columns: repeat(5,1fr);
+}
+.room-info {
+    padding-left: 3%;
 }
 .button-box {
     cursor : pointer;
@@ -15,6 +28,17 @@
 }
 .button-container{
     display: flex;
+}
+.span-title {
+    color: #57595d;
+}
+.span-topic {
+    display: inline-block;
+   
+    margin: auto;
+
+    color : #363945;
+    font-size: 1.5em;
 }
 
 

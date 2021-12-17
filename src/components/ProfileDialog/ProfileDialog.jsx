@@ -30,10 +30,14 @@ const ProfileDialog = ({user,open,setOpen,getUser})=>{
     const [file,setFile] = useState(null);
     const inputFile =useRef(null);
     useEffect(()=>{
+        
         setUsername(user?.username)
         setRealname(user?.realname);
         setImgP(process.env.REACT_APP_public + user?.avatar);
     },[user])
+    // useEffect(()=>{
+    //     getUser()
+    // },[])
     const handleClose = ()=>{
         setImgP(process.env.REACT_APP_public + user?.avatar);
         setOpen(false);

@@ -2,15 +2,14 @@ import React,{useContext, useRef,useEffect, useState} from 'react'
 import { SocketContext } from '../../context/roomContext'
 import './usercard.css'
 import { Button } from '@mui/material'
-const Audio = ({peer,setBorderT})=>{
+import 'material-icons/iconfont/material-icons.css';
+const Audio = ({peer,setBorderT,setMuted})=>{
     const analyser = useRef(null)
     const dataArray = useRef(null);
     const ref = useRef()
     useEffect(()=>{
         if(peer){
-        peer.on("stream",stream=>{    
-            console.log("has stream",stream)
-
+        peer.on("stream",stream=>{
            ref.current.srcObject = stream
            const audioContext = new AudioContext();
            const soure = audioContext.createMediaStreamSource(stream)
@@ -21,8 +20,29 @@ const Audio = ({peer,setBorderT})=>{
            analyser.current.getByteTimeDomainData(dataArray.current);
            soure.connect(analyser.current)
            analyser.current.getByteTimeDomainData(dataArray.current);
-         
+           peer.on('data',data=>{
+               console.log('hello world')
+            const check = new TextDecoder().decode(data)
+            if(check == "on"){
+                setMuted(false)
+            }else{
+                setMuted(true)
+            }
+           })
+       })
+    //    peer.on('data',data=>{
+    //        const check = new TextDecoder().decode(data)
+    //        console.log("c",check)
+    //        if(check == 'true') setMuted(false)
+    //        else 
            
+    //    })
+       peer.on("track",(track,stream)=>{
+        track.addEventListener("mute",()=>{
+           console.log("hey")
+        })
+        console.log("track",track)
+          
        })
        const item = setInterval(() => {
         if(analyser.current){
@@ -39,14 +59,6 @@ const Audio = ({peer,setBorderT})=>{
       return ()=> clearInterval(item)
         }
     },[])
-    function handleClick1(){
-        console.log("meow",peer)
-        if(peer){
-        peer.on("stream",(stream)=>{  
-            console.log("has stream")
-        })
-    }
-    }
     return (
         <div>
             <audio ref={ref} autoPlay />
@@ -54,21 +66,44 @@ const Audio = ({peer,setBorderT})=>{
        
     )
 }
-const UserCard = ({user,peer,role})=>{
+const UserCard = ({user,peer,role,isAdmin})=>{
     const [borderT,setBorderT] = useState(false);
+    const [muted,setMuted] = useState(false);
     const {providerPermisstion} = useContext(SocketContext)
+
     async function handleClick(){
         return await providerPermisstion(user.user.id,"speaker")
     }
+    useEffect(()=>{
+        console.log(peer)
+    },[])
   
     return(
         <div className="userCard" >
-             <img className="userImg" key={user?.user._id} src={process.env.REACT_APP_public +user?.user.avatar} style={{border : borderT ? "10px solid #20bd5f" : ''}} />
-              <div className="audio"> {(user.peer) ? <Audio peer={peer} setBorderT={setBorderT}/> : <div></div>}  </div>
-            <div className="username">
-                {(role == "user") ? <Button onClick={()=>handleClick()}>set Speaker</Button> : <div></div>}
+            <div className="img-container">
+            <div className="popup-container">
+                <div className="popup-info">
+                   <img className="popup-img" key={user?._id} src={process.env.REACT_APP_public +user?.avatar}  />
+                   <div className='text-info'>
+                       <div>{user?.username}</div>
+                       <div>@meow</div></div>
+                </div>
+                <div className="btn-speaker">
+                {(isAdmin) ?
+                <Button style={{color : "#181D31",backgroundColor : "#E6DDC4"}} 
+            onClick={(role == "user" && isAdmin) ? handleClick: ()=>{} }>{(role == "user") ? "Set as Speaker" : "Speaker"}</Button> : <div></div>}
+                </div>
                 
-                {user.user.username}
+                
+            </div>
+            <img className="userImg" key={user?._id} src={process.env.REACT_APP_public +user?.avatar} style={{boxShadow : borderT ? "0 0 2px 8px #464646ba" : ""}} />
+            
+            </div>
+             
+              <div className="audio"> {(peer) ? <Audio peer={peer} setMuted={setMuted} setBorderT={setBorderT}/> : <div></div>}  </div>
+            <div className="username">
+               <span className='span-t'>{user?.username}</span> 
+               {(user?.username == "You" ? <div></div> : <div className="mic-icon"><span className="material-icons" >{muted ? "mic_off" : "mic"}</span></div> ) }
             </div>
         </div>
     )

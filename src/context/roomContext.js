@@ -10,6 +10,7 @@ const ContextProvider = ({children}) =>{
     const [stream,setStream] = useState();
     const [peers,setPeers] = useState([])
     const [users,setUsers] = useState([])
+    const [micStatus,setMicStatus] = useState()
     const [speakers,setSpeakers] = useState([])
     const [listener,setListener] = useState([])
     const [user,setUser] = useState()
@@ -48,22 +49,24 @@ const ContextProvider = ({children}) =>{
             socketRef.current.on("role change",(data)=>{  
                 RoomService.getRoomById(roomCur.current._id).then(room=>{
                     roomCur.current = room
-                    console.log(roomCur.current)
-                    if(data.role == "speaker"){
-                        // const userChange = peersRef.current.
-                        const test = peersRef.current
-                        const userChange = test.find(l=> l.user.id == data.id)
-                        setListener(listener=> listener.filter(l => l.user.id != data.id));
-                        setSpeakers(speakers=> [...speakers,userChange])
-                    }
+                    // console.log(roomCur.current)
+                    // if(data.role == "speaker"){
+                    //     // const userChange = peersRef.current.
+                    //     const test = peersRef.current
+                    //     const userChange = test.find(l=> l.user.id == data.id)
+                    //     setListener(listener=> listener.filter(l => l.user.id != data.id));
+                    //     setSpeakers(speakers=> [...speakers,userChange])
+                    // }
                 })
                 
             })
+            socketRef.current.on("role changee",(data)=>{ 
+                window.location.reload();
+            });
             // socketRef.current.on("get room",allRoom=>{
             //     setAllRoom(allRoom);
             // })
             socketRef.current.on("all users",data =>{
-                console.log("all user",data)
                 const users = data.users
                 const peers = []
                 const Speakers = [];
@@ -99,11 +102,12 @@ const ContextProvider = ({children}) =>{
             // })
             socketRef.current.on('user joined', payload=>{
                 console.log("im join",payload);
-                const peer = addPeer(payload.signal,payload.caller.socketId,stream)
+                const peer = addPeer(payload.signal,payload.caller.socketId)
                 const peerObj = {
                     user : payload.caller,
                     peer : peer
                 }
+                
                 peersRef.current.push(peerObj)
                 const newUserPeer = peersRef.current
                 if(roomCur.current.speakers.find(s=> s._id == payload.caller.id) 
@@ -164,12 +168,14 @@ const ContextProvider = ({children}) =>{
     function joinRoom(){
         navigator.mediaDevices.getUserMedia({audio : true}).then(stream=>{
             setStream(stream)
+            setMicStatus(true);
             socketRef.current.emit('join room',{roomId : roomCur.current._id,user : {
                 username : user?.username,
                 avatar : user?.avatar,
                 userId : user?._id}
             });
         })
+    
         
     }
     function createPeer(userToSignal, callerId,streamm){
@@ -186,22 +192,42 @@ const ContextProvider = ({children}) =>{
         return peer;
     }
 
-    function addPeer(incommingSignal,callerId,streamm){
+    function addPeer(incommingSignal,callerId){
         const peer = new Peer({
             initiator : false,
             trickle : false,
             stream
         })
+       
         peer.on("signal",signal=>{
             socketRef.current.emit("returning signal", {signal,callerId})
+            
+        })
+        peer.on('connect',()=>{
+            const status = stream.getAudioTracks()[0].enabled ? "on" : "off";
+            console.log("status",status)
+            peer.send(status)
         })
 
         peer.signal(incommingSignal)
+        
         return peer
     }
     function muted(){
         console.log(stream)
-        stream.getAudioTracks()[0].enabled = !(stream.getAudioTracks()[0].enabled)
+        const track = stream.getAudioTracks()[0];
+        track.enabled = !track.enabled
+        const dP = peersRef.current;
+        setMicStatus(track.enabled);
+        const status = track.enabled ? "on" : "off";
+        console.log("oe",dP)
+        dP.forEach(p =>{
+            if(p.peer){
+            p.peer.send(status);
+            
+            }
+        })
+       
     }
     //  function loadUser() {
     //     console.log("user",peersRef.current)
@@ -253,6 +279,7 @@ const ContextProvider = ({children}) =>{
             getUser,
             providerPermisstion,
             userOut,
+            micStatus,
             // setRoomId,
             joinRoom
         }} >
