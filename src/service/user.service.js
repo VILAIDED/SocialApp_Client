@@ -4,9 +4,11 @@ export const UserService = {
     Login,
     Logout,
     getUser,
+    getUserById,
     Register,
     UploadProfile,
-    profileUpdate
+    profileUpdate,
+    getAllUser
 }
 const token = localStorage.getItem("token")
  async function UploadProfile(file){
@@ -19,6 +21,11 @@ const token = localStorage.getItem("token")
     }).then(res=>{
         return res.data
     })
+ }
+ async function getUserById(id){
+     return await axios.get(`/auth/user/${id}`).then(res =>{
+         return res.data;
+     })
  }
  async function Login(username,password){
     return await axios.post('/auth/login',{
@@ -38,6 +45,11 @@ const token = localStorage.getItem("token")
          return res.status
      })
  }
+async function getAllUser(){
+    return await axios.get("/auth/user").then(res=>{
+        return res.data;
+    })
+}
 function Logout(){
     localStorage.removeItem("token");
 }

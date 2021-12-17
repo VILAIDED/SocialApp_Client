@@ -12,7 +12,11 @@ export default function Login({setToken}){
         console.log("hello world")
         e.preventDefault();
         const token = await UserService.Login(username,password);
-        setToken(token);
+        if(token){
+            setToken(token);
+            window.location.reload();
+        }
+        
     }
     return(
         <div className="login-wrapper">

@@ -4,10 +4,13 @@ import axios from 'axios'
 const tokenHeader = {headers : {
     'auth-token' : JSON.parse(localStorage.getItem('token'))
 }}
-const createRoom = async (topic,description)=>{
+const createRoom = async (topic,description,idSpeaker)=>{
+    const jId = JSON.stringify(idSpeaker)
+    console.log("speaker", jId);
     console.log(tokenHeader)
     return await axios.post('/room/create',{
         topic : topic,
+        speakers : idSpeaker,
         roomType : "Open",
         description : description
        

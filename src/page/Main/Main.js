@@ -12,7 +12,7 @@ export default function  Main(){
     const {setRoomId,roomCur,user,getUser} = useContext(SocketContext) 
     const [openPDialog,setOpenPDialog] = useState(false);
     const [openCDialog,setOpenCDialog] = useState(false);
-   
+    const [User,setUser]= useState()
     const {allRoom} = useContext(SocketContext)
     const [rooms,setRooms] = useState()
     const [state,setState] = useState(true)
@@ -27,15 +27,15 @@ export default function  Main(){
         setOpen(false);
     }
     
-    // useEffect(()=>{
-    //     const getUser = async ()=>{
-    //         const user = await UserService.getUser()
-    //         const roomData = await RoomService.getAllRoom();
-    //         setRooms(roomData.room);
-    //        // setUser(user)
-    //     }
-    //     getUser()
-    // },[])
+    useEffect(()=>{
+        const getUser = async ()=>{
+            const user = await UserService.getUser()
+            // const roomData = await RoomService.getAllRoom();
+            // setRooms(roomData.room);
+            setUser(user)
+        }
+        getUser()
+    },[])
     return(
         <div className="main-page">
         {/* <div className="main-page"> */}
@@ -51,7 +51,7 @@ export default function  Main(){
         <div className="headbar-1">
         <span className="span-t">Room</span>
         <div>
-        <Button onClick={handleOpen} style={{backgroundColor : "#519259",color : "#181D31"}} onFocus={{ color: "red"}} >Create room</Button>
+        <Button onClick={handleOpen} style={{backgroundColor : "#519259",color : "#181D31"}} >Create room</Button>
         </div>
         </div>
         <div className="room-main">
@@ -59,14 +59,14 @@ export default function  Main(){
         <div className="card">
             {
                 allRoom?.map((room)=>(
-                    <RoomCard key={room._id} room={room} />
+                    <RoomCard key={room} roomId={room} />
                    
                 ))
             }
         {/* </div> */}
         </div>
         </div>
-        <ProfileDialog open={openPDialog} user={user} setOpen={setOpenPDialog} getUser={getUser} />
+        <ProfileDialog open={openPDialog} user={User} setOpen={setOpenPDialog} getUser={getUser} />
         <CreateRoomDialog open={openCDialog} setOpen={setOpenCDialog} />
         </div>
     )

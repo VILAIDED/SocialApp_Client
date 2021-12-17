@@ -8,11 +8,18 @@ import 'material-icons/iconfont/material-icons.css';
 import './room.css'
 import { Button } from '@mui/material'
 const Room = ()=>{
+   
     const {roomId} = useParams()
     const [isAdmin,setIsAdmin] = useState(false);
     const navigate = useNavigate()
     const {socketRef,roomCur,userOut,speakersRef,speakers,listener,user,muted,joinRoom,micStatus} = useContext(SocketContext)
+    function onBackButtonEvent(){
+        if(socketRef.current)  socketRef.current.emit("user out");
+        userOut();
+    }
+    window.onpopstate = onBackButtonEvent;
     useEffect(()=>{
+      
         if(!user) return
         const getRoom = async ()=>{
             roomCur.current = await RoomService.getRoomById(roomId)
@@ -28,17 +35,14 @@ const Room = ()=>{
         console.log("user",speakers)
         
     },[user])
-    // useEffect(()=>{
-        
-    // },[speakersRef.current])
     return(
         <div className="main-page">
             <div className="headbar">
-            <Button style={{color : "#181D31",backgroundColor : "#E6DDC4"}} 
-            onClick={()=>{
+            <Button style={{color : "#f8f8ff",backgroundColor : "#CD1818"}} onClick={()=>{
                 if(socketRef.current)  socketRef.current.emit("user out");
                 userOut();
-                navigate(-1)}}>Back</Button>
+                navigate(-1)}}>Leave room</Button>
+     
 
              <span className='span-topic'>{roomCur.current?.topic}</span>
             <div className="button-container" >
@@ -46,7 +50,7 @@ const Room = ()=>{
             <div className="button-box" onClick={()=>muted()}>
             <span className="material-icons" >{micStatus ? "mic" : "mic_off"}</span>
             </div>
-            <Button style={{color : "#f8f8ff",backgroundColor : "#CD1818"}}>Leave room</Button>
+            
             </div >
            </div>
            <div className="room-container">

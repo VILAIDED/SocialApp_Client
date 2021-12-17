@@ -1,5 +1,6 @@
 import React,{useContext, useRef,useEffect, useState} from 'react'
 import { SocketContext } from '../../context/roomContext'
+import { UserService } from '../../service/user.service'
 import './usercard.css'
 import { Button } from '@mui/material'
 import 'material-icons/iconfont/material-icons.css';
@@ -21,7 +22,6 @@ const Audio = ({peer,setBorderT,setMuted})=>{
            soure.connect(analyser.current)
            analyser.current.getByteTimeDomainData(dataArray.current);
            peer.on('data',data=>{
-               console.log('hello world')
             const check = new TextDecoder().decode(data)
             if(check == "on"){
                 setMuted(false)
@@ -70,12 +70,18 @@ const UserCard = ({user,peer,role,isAdmin})=>{
     const [borderT,setBorderT] = useState(false);
     const [muted,setMuted] = useState(false);
     const {providerPermisstion} = useContext(SocketContext)
-
+    const [User,setUser] = useState();
     async function handleClick(){
-        return await providerPermisstion(user.user.id,"speaker")
+        return await providerPermisstion(user.id,"speaker")
     }
     useEffect(()=>{
-        console.log(peer)
+        const getUser = async ()=>{
+            const data = await UserService.getUserById(user.id);
+            setUser(data);
+        }
+       
+        getUser();
+        console.log(User)
     },[])
   
     return(
@@ -85,8 +91,8 @@ const UserCard = ({user,peer,role,isAdmin})=>{
                 <div className="popup-info">
                    <img className="popup-img" key={user?._id} src={process.env.REACT_APP_public +user?.avatar}  />
                    <div className='text-info'>
-                       <div>{user?.username}</div>
-                       <div>@meow</div></div>
+                       <div>{User?.username}</div>
+                       <div>@{User?.realname}</div></div>
                 </div>
                 <div className="btn-speaker">
                 {(isAdmin) ?

@@ -17,6 +17,7 @@ const ContextProvider = ({children}) =>{
     const socketRef = useRef()
     const peersRef = useRef([])
     const roomCur = useRef()
+    const roomId = useRef()
     const speakerRef = useRef([])
     const listenerRef = useRef([])
     const [allRoom,setAllRoom] = useState([])
@@ -26,16 +27,23 @@ const ContextProvider = ({children}) =>{
         const user = await UserService.getUser()
         setUser(user)
     }
-    const getAllRoom = async ()=>{
-        const roomData = await RoomService.getAllRoom();
-        setAllRoom(roomData.room);
+    // const getAllRoom = async ()=>{
+    //     const roomData = await RoomService.getAllRoom();
+    //     setAllRoom(roomData.room);
         
-    }
+    // }
      useEffect(()=>{
         
-        getAllRoom()
+        // getAllRoom()
         getUser()
         socketRef.current = io.connect("http://localhost:9000")
+        socketRef.current.on("connect",()=>{
+            socketRef.current.emit("get room")
+            socketRef.current.on('get room',data=>{
+                setAllRoom(data);
+                console.log(data);
+            })
+        })
         return ()=> socketRef.current.disconnect()
      },[])
     //  useEffect(()=>{
@@ -46,17 +54,10 @@ const ContextProvider = ({children}) =>{
     // },[speakerRef.current])
     useEffect(()=>{
             if(socketRef.current == null || !user) return
+            
             socketRef.current.on("role change",(data)=>{  
                 RoomService.getRoomById(roomCur.current._id).then(room=>{
                     roomCur.current = room
-                    // console.log(roomCur.current)
-                    // if(data.role == "speaker"){
-                    //     // const userChange = peersRef.current.
-                    //     const test = peersRef.current
-                    //     const userChange = test.find(l=> l.user.id == data.id)
-                    //     setListener(listener=> listener.filter(l => l.user.id != data.id));
-                    //     setSpeakers(speakers=> [...speakers,userChange])
-                    // }
                 })
                 
             })
@@ -152,9 +153,11 @@ const ContextProvider = ({children}) =>{
     },[stream])
     function userOut(){
         console.log("stream",stream)
+        if(stream.getTracks){
         stream.getTracks().forEach(function(track) {
             track.stop();
           });
+        }
         socketRef.current.removeAllListeners();
         peersRef.current = []
         setPeers([])

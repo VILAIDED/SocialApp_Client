@@ -31,7 +31,10 @@ const LoginDialog = ({open,setOpen,setToken})=>{
         console.log("username",username);
         console.log("password",password);
         const token = await UserService.Login(username,password);
-        setToken(token);
+        if(token){
+            setToken(token);
+            window.location.reload();
+        }
     }
     return (
         <Dialog PaperProps={{ sx: { width: "40%", height: "50%" ,borderRadius : 5} }}
