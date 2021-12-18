@@ -63,3 +63,49 @@
     row-gap: 0rem;
     grid-auto-rows: min-content;
 }
+.suggest-room{
+    width: 400px;
+    position: absolute;
+}
+.suggest-roomItem:hover{
+    background: #f9ffe3;
+}
+.suggest-roomItem {
+    background: white;
+    border-radius: 2%;
+    min-height: 100px;
+    display: grid;
+    grid-template-rows: 2fr 2fr 1fr;
+    padding-left: 20px;
+    cursor: pointer;
+    align-items: center;
+    border : 1px solid #464646ba;
+}
+.s-description{
+    font-size: 15px;
+    color: #464646ba;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+.bottom-item{
+    position: absolute;
+    bottom: 0;
+}
+.bottom-span{
+    display: flex;
+    flex-direction: row;
+    justify-content : space-between;
+}
+.s-id{
+    font-size: 10px;
+}
+.s-owner {
+    color: #181D31;
+    padding-left: 5px;
+}
+.create-by {
+    padding-right: 5px;
+    font-size: 10px;
+    color: #464646ba;
+}

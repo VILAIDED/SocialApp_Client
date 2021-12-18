@@ -64,6 +64,7 @@ return(
              id="topic"
              fullWidth
              type="text"
+             autoComplete="off"
              label = "Topic"
              variant="outlined"
              required
@@ -74,11 +75,12 @@ return(
              onChange={(e)=> setDescription(e.target.value)}
             
              id="description"
+             autoComplete="off"
              fullWidth
              type="text"
              label = "Description"
              variant="outlined"
-             required
+            
              /> 
              </div>
              <div className="sp-title">
@@ -108,7 +110,7 @@ return(
              type="text"
              label = "User"
              variant="outlined"
-             required
+            
              /> 
              </div>
 

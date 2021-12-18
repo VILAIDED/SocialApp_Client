@@ -5,16 +5,11 @@ import { RoomService } from "../../service/room.service";
 import { SocketContext } from "../../context/roomContext";
 import './RoomCard.css'
 
-const RoomCard = ({roomId}) =>{
+const RoomCard = ({room}) =>{
     const history = useNavigate();
-    const [room,setRoom] = useState();
     const {connectSocket,roomCur} = useContext(SocketContext)
     useEffect(()=>{
-       const getRoom = async ()=>{
-          const data = await RoomService.getRoomById(roomId)
-       setRoom(data);
-       }
-       getRoom();
+      
        
     },[])
     return(
@@ -34,12 +29,15 @@ const RoomCard = ({roomId}) =>{
                   <div className="topic">
                     {room?.topic}
                   </div>
-                  <div className="description-text">
+                  <span className="description-text">
                    {room?.description}
-                  </div>
+                  </span>
                 </div>
                 <div className="speakers">
-               <span className="speaker-t">speaker</span> : Ning,Cap...
+               <span className="speaker-t">speaker</span>
+               <span>: {(room?.speakers.slice(0,2).map((s,i)=>(
+                  `${s?.username}`  + (i == 1 || room?.speakers.length == 1 ? '' : ', ')
+               )))} {(room?.speakers.length > 2) ? '...' : ''}</span>
             </div>
             </div>
 

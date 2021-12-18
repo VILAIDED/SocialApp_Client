@@ -6,7 +6,7 @@
      background : #f8f8ffba;
     padding : 20px;
     margin : 20px;
-    
+    max-width: 400px;
     border-radius : 10px;
     cursor : pointer;
     grid-template-columns: 1fr 4fr;
@@ -40,14 +40,24 @@
    
 }
 .description-text{
+    font-size: 15px;
     color: #363945;
     padding-top: 10px;
+    /* white-space: nowrap; */
+    /* display: block; */
+    display: -webkit-box;
+    -webkit-line-clamp: 3; 
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+    /* white-space:nowrap; */
+    overflow: hidden;
+    max-width: 300px;
 }
 .speaker-t{
     color: #363945;
 }
 .Infomation {
-    display: inline-flex;
+    display: flex;
     justify-content: space-between;
     flex-direction: column;
     /* justify-content: space-between; */

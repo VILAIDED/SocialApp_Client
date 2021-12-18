@@ -2,6 +2,8 @@
     display: block;
     margin : auto;
     padding-top : 30px;
+    bottom: 5%;
+   
 }
 .suggest-item{
     background: white;

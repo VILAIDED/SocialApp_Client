@@ -55,6 +55,7 @@ const Room = ()=>{
            </div>
            <div className="room-container">
                <div>
+               <span className='span-r'>room id : </span><span className='span-t'>{roomCur.current?._id}</span>
                {/* <div>Speaker</div> */}
                <div className="user-container">
                    {speakers.map((speaker) => (

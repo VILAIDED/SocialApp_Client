@@ -41,10 +41,18 @@ const getRoomByType = async (type)=>{
         return res
     })
 }
+const getRoomsById = async (ids)=>{
+    console.log("idAxios",ids)
+    return await axios.post('/room/room',
+    {id : ids}).then((res)=>{
+        return res.data
+    })
+}
 export const RoomService = {
     createRoom,
     getRoomByType,
     getAllRoom,
     setSpeakers,
-    getRoomById
+    getRoomById,
+    getRoomsById
 }
