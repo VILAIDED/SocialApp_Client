@@ -169,6 +169,7 @@ const ContextProvider = ({children}) =>{
 
     }
     function joinRoom(){
+        console.log("hello im join")
         navigator.mediaDevices.getUserMedia({audio : true}).then(stream=>{
             setStream(stream)
             setMicStatus(true);
@@ -177,6 +178,12 @@ const ContextProvider = ({children}) =>{
                 avatar : user?.avatar,
                 userId : user?._id}
             });
+
+            if(!roomCur.current.speakers.find(s=> s._id == user._id) && !(roomCur.current.ownerId._id == user._id)){
+                const track = stream.getAudioTracks()[0];
+                track.enabled = false
+                console.log("auto mute")
+            }
         })
     
         

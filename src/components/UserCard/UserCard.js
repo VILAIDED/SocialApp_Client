@@ -109,7 +109,7 @@ const UserCard = ({user,peer,role,isAdmin})=>{
               <div className="audio"> {(peer) ? <Audio peer={peer} setMuted={setMuted} setBorderT={setBorderT}/> : <div></div>}  </div>
             <div className="username">
                <span className='span-t'>{user?.username}</span> 
-               {(user?.username == "You" ? <div></div> : <div className="mic-icon"><span className="material-icons" >{muted ? "mic_off" : "mic"}</span></div> ) }
+               {(user?.username == "You" || role == "user" ? <div></div> : <div className="mic-icon"><span className="material-icons" >{muted ? "mic_off" : "mic"}</span></div> ) }
             </div>
         </div>
     )

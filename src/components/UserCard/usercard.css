@@ -66,6 +66,7 @@
   width: 10%;
   min-width: 50px;
   min-height: 50px;
+  
   align-items: center;
   /* margin: auto; */
   border-radius: 50%;
@@ -88,6 +89,7 @@
     min-width: 200px;
     height : 90%;
     width: 62%;
+    max-height: 204px;
     border-radius : 50%;
     object-fit : cover;
     margin:auto;

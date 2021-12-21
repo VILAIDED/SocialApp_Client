@@ -11,6 +11,7 @@ const Room = ()=>{
    
     const {roomId} = useParams()
     const [isAdmin,setIsAdmin] = useState(false);
+    const [role,setRole] = useState("user");
     const navigate = useNavigate()
     const {socketRef,roomCur,userOut,speakersRef,speakers,listener,user,muted,joinRoom,micStatus} = useContext(SocketContext)
     function onBackButtonEvent(){
@@ -26,6 +27,10 @@ const Room = ()=>{
             console.log("id",roomCur.current)
             if(roomCur.current.ownerId._id == user._id){
                 setIsAdmin(true);
+                setRole("speaker")
+            }
+            if(roomCur.current.speakers.find(u=> u._id == user._id)){
+                setRole("speaker")
             }
         }       
         getRoom().then(()=>{
@@ -48,14 +53,16 @@ const Room = ()=>{
             <div className="button-container" >
             
             <div className="button-box" onClick={()=>muted()}>
-            <span className="material-icons" >{micStatus ? "mic" : "mic_off"}</span>
+            {role == "speaker" ? <span className="material-icons" >{micStatus ? "mic" : "mic_off"}</span> : <span></span>}
+            
             </div>
             
             </div >
            </div>
+           <span className='span-r'>room id : </span><span className='span-t'>{roomCur.current?._id}</span>
            <div className="room-container">
                <div>
-               <span className='span-r'>room id : </span><span className='span-t'>{roomCur.current?._id}</span>
+             
                {/* <div>Speaker</div> */}
                <div className="user-container">
                    {speakers.map((speaker) => (
@@ -65,9 +72,11 @@ const Room = ()=>{
                </div>
                <div>
                <div></div>
+               <span className="span-t">Listener</span>
                {listener.length > 0 ? 
+               
                <div>
-                   <span className="span-t">Listener</span>
+                   
                <div className="user-container">
                    {listener.map((speaker)=>(
                    <UserCard key={speaker.user.id} peer={speaker?.peer} user={speaker.user} isAdmin={isAdmin} role="user" />
