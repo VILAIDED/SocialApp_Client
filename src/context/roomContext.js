@@ -164,9 +164,7 @@ const ContextProvider = ({children}) =>{
     function createPeer(userToSignal, callerId,streamm){
         console.log("stream create",stream)
         const peer = new Peer({
-            config : { optional: [{
-                RtpDataChannels: true
-              }]},
+            config : { iceServers:[{urls : "stun:stun.nextcloud.com:443"},{urls : "stun:relay.webwormhole.io"}]},
             initiator : true,
             trickle : false,
             stream
@@ -180,9 +178,7 @@ const ContextProvider = ({children}) =>{
 
     function addPeer(incommingSignal,callerId){
         const peer = new Peer({
-            config : { optional: [{
-                RtpDataChannels: true
-              }]},
+            config : { iceServers:[{urls : "stun:stun.nextcloud.com:443"},{urls : "stun:relay.webwormhole.io"}]},
             initiator : false,
             trickle : false,
             stream
