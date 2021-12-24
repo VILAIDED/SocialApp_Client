@@ -164,6 +164,9 @@ const ContextProvider = ({children}) =>{
     function createPeer(userToSignal, callerId,streamm){
         console.log("stream create",stream)
         const peer = new Peer({
+            config : { optional: [{
+                RtpDataChannels: true
+              }]},
             initiator : true,
             trickle : false,
             stream
@@ -177,6 +180,9 @@ const ContextProvider = ({children}) =>{
 
     function addPeer(incommingSignal,callerId){
         const peer = new Peer({
+            config : { optional: [{
+                RtpDataChannels: true
+              }]},
             initiator : false,
             trickle : false,
             stream
