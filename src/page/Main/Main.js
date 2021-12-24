@@ -57,7 +57,7 @@ export default function  Main(){
         {/* <div className="main-page"> */}
             
         <div className="headbar">
-            <span className="span-t">Git House</span>
+            <span className="span-t">ThanhDed_House</span>
               <div className="icon-profile" onClick={()=> setOpenPDialog(true)}>
                 <img  src={process.env.REACT_APP_public + user?.avatar} ></img>
             

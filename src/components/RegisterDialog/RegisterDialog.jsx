@@ -49,7 +49,7 @@ const RegisterDialog = ({open,setOpen,setToken})=>{
     return (
         <Dialog PaperProps={{ sx: { width: "40%", height: "60%" ,borderRadius : 5} }}
          open={open} onClose={handleClose} >
-            <DialogTitle>Login to Githouse</DialogTitle>
+            <DialogTitle>Login to ThanhDed_House</DialogTitle>
             <DialogContent>
             <Box
             noValidate

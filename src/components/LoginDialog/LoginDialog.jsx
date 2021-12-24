@@ -39,7 +39,7 @@ const LoginDialog = ({open,setOpen,setToken})=>{
     return (
         <Dialog PaperProps={{ sx: { width: "40%", height: "50%" ,borderRadius : 5} }}
          open={open} onClose={handleClose} >
-            <DialogTitle>Login to Githouse</DialogTitle>
+            <DialogTitle>Login to ThanhDed_House</DialogTitle>
             <DialogContent>
             <Box
             noValidate

@@ -17,7 +17,7 @@ const Home = ({setToken})=>{
                 <div className="btn-user">
                   <div className="btn-item">
                     <div className="span-text">
-                       <span>You are new in GitHouse</span>
+                       <span>You are new in ThanhDed_House</span>
                     </div>
                        <Button variant="contained" onClick={()=>setOpenSDialog(true)} style={{ borderRadius: 30 }} className="btn">Sign up</Button>
                     </div>
