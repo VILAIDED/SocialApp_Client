@@ -1,5 +1,5 @@
 import axios from 'axios'
-
+const url = "https://pbl4t.herokuapp.com/api";
 export const UserService = {
     Login,
     Logout,
@@ -14,7 +14,7 @@ const token = localStorage.getItem("token")
  async function UploadProfile(file){
     const formData = new FormData();
     formData.append("profile",file)
-    return await axios.put('/auth/uploadprofile',formData,{
+    return await axios.put(url+'/auth/uploadprofile',formData,{
         headers : {
             "auth-token" : JSON.parse(token)
         }
@@ -23,12 +23,12 @@ const token = localStorage.getItem("token")
     })
  }
  async function getUserById(id){
-     return await axios.get(`/auth/user/${id}`).then(res =>{
+     return await axios.get(url+`/auth/user/${id}`).then(res =>{
          return res.data;
      })
  }
  async function Login(username,password){
-    return await axios.post('/auth/login',{
+    return await axios.post(url+'/auth/login',{
         username : username,
         password : password
     }).then(res => {
@@ -37,7 +37,7 @@ const token = localStorage.getItem("token")
     })
 }
  async function Register(data){
-     return await axios.post('/auth/register',{
+     return await axios.post(url+'/auth/register',{
          username : data.username,
          password : data.password,
          realname : data.realname
@@ -46,7 +46,7 @@ const token = localStorage.getItem("token")
      })
  }
 async function getAllUser(){
-    return await axios.get("/auth/user").then(res=>{
+    return await axios.get(url+"/auth/user").then(res=>{
         return res.data;
     })
 }
@@ -54,7 +54,7 @@ function Logout(){
     localStorage.removeItem("token");
 }
  async function profileUpdate(username,realname){
-    return await axios.put('/auth/editprofile',{username : username,realname : realname},{
+    return await axios.put(url+'/auth/editprofile',{username : username,realname : realname},{
         headers : {
             "auth-token" : JSON.parse(token)
         }
@@ -63,7 +63,7 @@ function Logout(){
     })
  }
  async function getUser(){
-     return await axios.get('/auth/logined',{
+     return await axios.get(url+'/auth/logined',{
          headers : {
              "auth-token" : JSON.parse(token)
          }

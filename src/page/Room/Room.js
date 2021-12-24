@@ -1,6 +1,5 @@
 import React,{useContext,useState,useEffect} from 'react'
 import {SocketContext} from "../../context/roomContext"
-import {UserData} from '../../DataTest/userData'
 import UserCard from '../../components/UserCard/UserCard'
 import {RoomService} from '../../service/room.service'
 import { useNavigate ,useParams} from 'react-router'
@@ -13,7 +12,7 @@ const Room = ()=>{
     const [isAdmin,setIsAdmin] = useState(false);
     const [role,setRole] = useState("user");
     const navigate = useNavigate()
-    const {socketRef,roomCur,userOut,speakersRef,speakers,listener,user,muted,joinRoom,micStatus} = useContext(SocketContext)
+    const {socketRef,roomCur,userOut,speakers,listener,user,muted,joinRoom,micStatus} = useContext(SocketContext)
     function onBackButtonEvent(){
         if(socketRef.current)  socketRef.current.emit("user out");
         userOut();
