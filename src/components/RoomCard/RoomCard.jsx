@@ -7,7 +7,7 @@ import './RoomCard.css'
 
 const RoomCard = ({room}) =>{
     const history = useNavigate();
-    const {connectSocket,roomCur} = useContext(SocketContext)
+    const {roomCur} = useContext(SocketContext)
     useEffect(()=>{
       
        

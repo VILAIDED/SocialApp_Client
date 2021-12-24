@@ -43,5 +43,5 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://localhost:9000/api"
+  "proxy": "https://pbl4t.herokuapp.com/api"
 }

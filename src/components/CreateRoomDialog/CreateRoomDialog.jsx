@@ -46,7 +46,7 @@ const CreateRoomDialog = ({open,setOpen}) =>{
     },[])
 
 return(
-    <Dialog PaperProps={{ sx: { width: "50%", height: "50%" ,borderRadius : 5,backgroundColor : "#f8f8ff"} }}
+    <Dialog PaperProps={{ sx: { width: "50%", height: "80%" ,borderRadius : 5,backgroundColor : "#f8f8ff"} }}
      open={open} onClose={handleClose} >
            <DialogTitle>Create your rooom</DialogTitle>
            <Box

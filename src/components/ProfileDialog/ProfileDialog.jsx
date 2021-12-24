@@ -66,7 +66,7 @@ const ProfileDialog = ({user,open,setOpen,getUser})=>{
         setOpen(false);
     }
     return(
-        <Dialog PaperProps={{ sx: { width: "40%", height: "60%" ,borderRadius : 5} }}
+        <Dialog PaperProps={{ sx: { width: "40%", height: "80%" ,borderRadius : 5} }}
          open={open} onClose={handleClose} >
             <DialogTitle>
                 <div className="profile-header">

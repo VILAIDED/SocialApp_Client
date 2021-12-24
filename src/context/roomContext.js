@@ -36,7 +36,7 @@ const ContextProvider = ({children}) =>{
         
         // getAllRoom()
         getUser()
-        socketRef.current = io.connect("http://localhost:9000")
+        socketRef.current = io.connect("https://pbl4t.herokuapp.com/")
         socketRef.current.on("connect",()=>{
             socketRef.current.emit("get room")
             socketRef.current.on('get room',data=>{
